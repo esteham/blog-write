@@ -1,38 +1,28 @@
 <?php
-function blog_write_form_shortcode($atts = []) {
-    ob_start();
-    include BLOG_WRITE_PATH . 'templates/blog-form.php';
-    return ob_get_clean();
-}
-add_shortcode('blog_write_form', 'blog_write_form_shortcode');
-
 function blog_write_display_posts_shortcode($atts = []) {
     ob_start();
     
-    // Get posts from our custom table
     $submitted_posts = blog_write_get_form_submitted_posts();
     
     if ($submitted_posts && $submitted_posts->have_posts()) {
-        while ($submitted_posts->have_posts()) : $submitted_posts->the_post(); ?>
-            <article class="blog-write-post">
-                <h4><?php the_title(); ?></h4>
-                <div class="post-meta">
-                    Published on: <?php echo get_the_date(); ?>
-                    <?php if (is_user_logged_in()): ?>
-                        | Status: <?php echo ucfirst(get_post_status()); ?>
-                    <?php endif; ?>
-                </div>
-                <?php if (has_post_thumbnail()) : ?>
-                    <div class="post-thumbnail">
-                        <?php the_post_thumbnail('medium'); ?>
-                    </div>
-                <?php endif; ?>
-                <div class="post-content"><?php the_content(); ?></div>
-            </article>
-        <?php endwhile;
+        echo '<div class="blog-write-posts">';
+        while ($submitted_posts->have_posts()) : $submitted_posts->the_post(); 
+            include BLOG_WRITE_PATH . 'templates/user-posts.php';
+        endwhile;
+        echo '</div>';
         wp_reset_postdata();
     } else {
-        echo '<p>No posts found.</p>';
+        echo '<p>No posts found in the blog write system.</p>';
+        
+        // Debug output (remove in production)
+        if (current_user_can('manage_options')) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'blog_write_posts';
+            $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+            echo '<div class="debug-info" style="display:none;">';
+            echo 'Posts in custom table: ' . $count;
+            echo '</div>';
+        }
     }
     
     return ob_get_clean();
