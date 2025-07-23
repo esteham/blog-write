@@ -26,9 +26,11 @@ function blog_write_handle_submission() {
         // Handle author
         if (is_user_logged_in()) {
             $author_id = get_current_user_id();
+            $user_info = get_userdata($author_id);
+            $submitted_by = $user_info->user_email;
         } else {
-            // Create guest author automatically
-            $author_id = 1; // Or set to default admin ID
+            $author_id = 1; // Default admin ID
+            $submitted_by = 'guest';
         }
         
         // Validate required fields
@@ -50,6 +52,20 @@ function blog_write_handle_submission() {
         if (is_wp_error($post_id)) {
             wp_die($post_id->get_error_message());
         }
+        
+        // Record the submission in our custom table
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blog_write_posts';
+
+        $wpdb->insert(
+            $table_name,
+            [
+                'post_id' => $post_id,
+                'submitted_by' => $submitted_by,
+                'submitted_at' => current_time('mysql')
+            ],
+            ['%d', '%s', '%s'] // data formats
+        );
         
         // Handle featured image
         if (!empty($_FILES['featured_image']['name'])) {

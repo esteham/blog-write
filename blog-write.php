@@ -36,6 +36,8 @@ register_activation_hook(__FILE__, 'blog_write_activate');
 require_once BLOG_WRITE_PATH . 'includes/shortcodes.php';
 require_once BLOG_WRITE_PATH . 'includes/form-handler.php';
 require_once BLOG_WRITE_PATH . 'includes/display-posts.php';
+// Add this line with other includes
+require_once BLOG_WRITE_PATH . 'includes/db.php';
 
 // Load assets
 function blog_write_load_assets() {
