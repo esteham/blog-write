@@ -15,8 +15,17 @@ defined('ABSPATH') or die('No direct access allowed!');
 define('BLOG_WRITE_PATH', plugin_dir_path(__FILE__));
 define('BLOG_WRITE_URL', plugin_dir_url(__FILE__));
 
+// Include necessary files
+require_once BLOG_WRITE_PATH . 'includes/db.php';
+require_once BLOG_WRITE_PATH . 'includes/shortcodes.php';
+require_once BLOG_WRITE_PATH . 'includes/form-handler.php';
+require_once BLOG_WRITE_PATH . 'includes/display-posts.php';
+
 // Activation hook
 function blog_write_activate() {
+    // Create database table
+    blog_write_create_db_table();
+    
     // Create guest author role
     if (!get_role('guest_author')) {
         add_role('guest_author', 'Guest Author', array(
@@ -31,13 +40,6 @@ function blog_write_activate() {
     add_option('blog_write_recaptcha_secret_key', '');
 }
 register_activation_hook(__FILE__, 'blog_write_activate');
-
-// Include necessary files
-require_once BLOG_WRITE_PATH . 'includes/shortcodes.php';
-require_once BLOG_WRITE_PATH . 'includes/form-handler.php';
-require_once BLOG_WRITE_PATH . 'includes/display-posts.php';
-// Add this line with other includes
-require_once BLOG_WRITE_PATH . 'includes/db.php';
 
 // Load assets
 function blog_write_load_assets() {

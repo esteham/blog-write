@@ -15,4 +15,3 @@ function blog_write_create_db_table() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
 }
-register_activation_hook(__FILE__, 'blog_write_create_db_table');

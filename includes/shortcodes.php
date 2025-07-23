@@ -9,19 +9,11 @@ add_shortcode('blog_write_form', 'blog_write_form_shortcode');
 function blog_write_display_posts_shortcode($atts = []) {
     ob_start();
     
-    // Get all published posts for everyone (no login required)
-    $args = [
-        'post_type' => 'post',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-        'orderby' => 'date',
-        'order' => 'DESC'
-    ];
+    // Get posts from our custom table
+    $submitted_posts = blog_write_get_form_submitted_posts();
     
-    $all_posts = new WP_Query($args);
-    
-    if ($all_posts->have_posts()) {
-        while ($all_posts->have_posts()) : $all_posts->the_post(); ?>
+    if ($submitted_posts && $submitted_posts->have_posts()) {
+        while ($submitted_posts->have_posts()) : $submitted_posts->the_post(); ?>
             <article class="blog-write-post">
                 <h4><?php the_title(); ?></h4>
                 <div class="post-meta">
