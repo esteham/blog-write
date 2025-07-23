@@ -1,0 +1,59 @@
+.blog-write-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.blog-write-notice {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+}
+
+.blog-write-notice.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.blog-write-form .form-group {
+    margin-bottom: 20px;
+}
+
+.blog-write-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.blog-write-form input[type="text"],
+.blog-write-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.blog-write-form input[type="submit"] {
+    background: #0073aa;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.blog-write-form input[type="submit"]:hover {
+    background: #005177;
+}
+
+.blog-write-posts {
+    margin-top: 40px;
+}
+
+.blog-write-post {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
