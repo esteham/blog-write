@@ -67,6 +67,9 @@ function blog_write_handle_submission() {
             ['%d', '%s', '%s'] // data formats
         );
         
+        // Add post meta to mark it as a blog write submission
+        update_post_meta($post_id, '_blog_write_submission', '1');
+        
         // Handle featured image
         if (!empty($_FILES['featured_image']['name'])) {
             require_once(ABSPATH . 'wp-admin/includes/image.php');
