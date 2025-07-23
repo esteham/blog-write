@@ -4,17 +4,20 @@
     padding: 20px;
     background: #f9f9f9;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .blog-write-notice {
-    padding: 10px;
+    padding: 10px 15px;
     margin-bottom: 20px;
     border-radius: 3px;
+    border: 1px solid transparent;
 }
 
 .blog-write-notice.success {
     background: #d4edda;
     color: #155724;
+    border-color: #c3e6cb;
 }
 
 .blog-write-form .form-group {
@@ -28,11 +31,14 @@
 }
 
 .blog-write-form input[type="text"],
-.blog-write-form textarea {
+.blog-write-form input[type="email"],
+.blog-write-form textarea,
+.blog-write-form select {
     width: 100%;
-    padding: 8px;
+    padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 3px;
+    font-size: 14px;
 }
 
 .blog-write-form input[type="submit"] {
@@ -42,6 +48,8 @@
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 3px;
+    font-size: 16px;
+    transition: background 0.3s;
 }
 
 .blog-write-form input[type="submit"]:hover {
@@ -56,4 +64,28 @@
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
+}
+
+.blog-write-post h4 {
+    margin-bottom: 5px;
+}
+
+.post-meta {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.post-thumbnail {
+    margin-bottom: 15px;
+}
+
+.post-thumbnail img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Admin settings */
+.recaptcha-settings {
+    display: none;
 }
