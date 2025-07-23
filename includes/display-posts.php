@@ -2,6 +2,8 @@
 function blog_write_get_user_posts($user_id = null) {
     if (!$user_id && is_user_logged_in()) {
         $user_id = get_current_user_id();
+    } elseif (!$user_id) {
+        return false;
     }
     
     $args = [

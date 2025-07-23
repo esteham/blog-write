@@ -15,18 +15,33 @@ defined('ABSPATH') or die('No direct access allowed!');
 define('BLOG_WRITE_PATH', plugin_dir_path(__FILE__));
 define('BLOG_WRITE_URL', plugin_dir_url(__FILE__));
 
+// Create necessary directories on activation
+function blog_write_activate() {
+    // Create upload directory if it doesn't exist
+    $upload_dir = wp_upload_dir();
+    $blog_write_dir = $upload_dir['basedir'] . '/blog-write';
+    if (!file_exists($blog_write_dir)) {
+        wp_mkdir_p($blog_write_dir);
+    }
+    
+    // Create guest author role
+    blog_write_create_guest_role();
+}
+register_activation_hook(__FILE__, 'blog_write_activate');
+
+// Create guest author role
+function blog_write_create_guest_role() {
+    if (!get_role('guest_author')) {
+        add_role('guest_author', 'Guest Author', array(
+            'read' => true,
+        ));
+    }
+}
+
 // Include necessary files
 require_once BLOG_WRITE_PATH . 'includes/shortcodes.php';
 require_once BLOG_WRITE_PATH . 'includes/form-handler.php';
 require_once BLOG_WRITE_PATH . 'includes/display-posts.php';
-
-// Create guest author role on activation
-function blog_write_create_guest_role() {
-    add_role('guest_author', 'Guest Author', array(
-        'read' => true,
-    ));
-}
-register_activation_hook(__FILE__, 'blog_write_create_guest_role');
 
 // Load assets
 function blog_write_load_assets() {
@@ -56,12 +71,21 @@ function blog_write_settings_page_html() {
     if (!current_user_can('manage_options')) return;
     
     if (isset($_POST['blog_write_settings_submit'])) {
-        update_option('blog_write_enable_recaptcha', isset($_POST['enable_recaptcha']));
+        check_admin_referer('blog_write_settings');
+        
+        update_option('blog_write_enable_recaptcha', isset($_POST['enable_recaptcha']) ? 1 : 0);
         update_option('blog_write_recaptcha_site_key', sanitize_text_field($_POST['recaptcha_site_key']));
         update_option('blog_write_recaptcha_secret_key', sanitize_text_field($_POST['recaptcha_secret_key']));
         update_option('blog_write_default_status', sanitize_text_field($_POST['default_status']));
+        
         echo '<div class="notice notice-success"><p>Settings saved!</p></div>';
     }
     
     include BLOG_WRITE_PATH . 'templates/settings-page.php';
 }
+
+// Initialize the plugin
+function blog_write_init() {
+    // Nothing needed here for now, but good practice to have
+}
+add_action('plugins_loaded', 'blog_write_init');

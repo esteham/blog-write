@@ -2,6 +2,7 @@
     <h1>Blog Write Settings</h1>
     
     <form method="post" action="">
+        <?php wp_nonce_field('blog_write_settings'); ?>
         <table class="form-table">
             <tr>
                 <th scope="row">Default Post Status</th>

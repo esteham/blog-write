@@ -2,10 +2,9 @@
     <h3>Your Published Posts</h3>
     
     <?php 
-    $user_id = is_user_logged_in() ? get_current_user_id() : null;
-    $user_posts = blog_write_get_user_posts($user_id);
+    $user_posts = blog_write_get_user_posts();
     
-    if ($user_posts->have_posts()) : 
+    if ($user_posts && $user_posts->have_posts()) : 
         while ($user_posts->have_posts()) : $user_posts->the_post(); ?>
             <article class="blog-write-post">
                 <h4><?php the_title(); ?></h4>

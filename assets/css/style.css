@@ -89,3 +89,8 @@
 .recaptcha-settings {
     display: none;
 }
+
+/* Error state */
+.blog-write-form input.error {
+    border-color: #dc3232;
+}
