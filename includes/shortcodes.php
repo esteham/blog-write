@@ -9,23 +9,38 @@ add_shortcode('blog_write_form', 'blog_write_form_shortcode');
 function blog_write_display_posts_shortcode($atts = []) {
     ob_start();
     
-    // Always show posts if user is logged in
-    if (is_user_logged_in()) {
-        $user_posts = blog_write_get_user_posts(get_current_user_id());
-        
-        if ($user_posts && $user_posts->have_posts()) {
-            include BLOG_WRITE_PATH . 'templates/user-posts.php';
-        } else {
-            echo '<p>No posts found. Would you like to <a href="' . get_permalink() . '">create one</a>?</p>';
-        }
+    // Get all published posts for everyone (no login required)
+    $args = [
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby' => 'date',
+        'order' => 'DESC'
+    ];
+    
+    $all_posts = new WP_Query($args);
+    
+    if ($all_posts->have_posts()) {
+        while ($all_posts->have_posts()) : $all_posts->the_post(); ?>
+            <article class="blog-write-post">
+                <h4><?php the_title(); ?></h4>
+                <div class="post-meta">
+                    Published on: <?php echo get_the_date(); ?>
+                    <?php if (is_user_logged_in()): ?>
+                        | Status: <?php echo ucfirst(get_post_status()); ?>
+                    <?php endif; ?>
+                </div>
+                <?php if (has_post_thumbnail()) : ?>
+                    <div class="post-thumbnail">
+                        <?php the_post_thumbnail('medium'); ?>
+                    </div>
+                <?php endif; ?>
+                <div class="post-content"><?php the_content(); ?></div>
+            </article>
+        <?php endwhile;
+        wp_reset_postdata();
     } else {
-        // Show login message with link to login page
-        $login_url = wp_login_url(get_permalink());
-        $register_url = wp_registration_url();
-        echo '<div class="blog-write-login-notice">';
-        echo '<p>Please <a href="' . esc_url($login_url) . '">log in</a> to view your posts.</p>';
-        echo '<p>Don\'t have an account? <a href="' . esc_url($register_url) . '">Register here</a>.</p>';
-        echo '</div>';
+        echo '<p>No posts found.</p>';
     }
     
     return ob_get_clean();
