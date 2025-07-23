@@ -1,15 +1,15 @@
 <div class="blog-write-posts">
-    <h3>Your Published Posts</h3>
+    <h3>Your Posts</h3>
     
     <?php 
-    $user_posts = blog_write_get_user_posts();
+    $user_posts = blog_write_get_user_posts(get_current_user_id());
     
     if ($user_posts && $user_posts->have_posts()) : 
         while ($user_posts->have_posts()) : $user_posts->the_post(); ?>
             <article class="blog-write-post">
                 <h4><?php the_title(); ?></h4>
                 <div class="post-meta">
-                    Status: <?php echo get_post_status(); ?> | 
+                    Status: <?php echo ucfirst(get_post_status()); ?> | 
                     Published on: <?php echo get_the_date(); ?>
                 </div>
                 <?php if (has_post_thumbnail()) : ?>

@@ -5,9 +5,9 @@
         <?php wp_nonce_field('blog_write_settings'); ?>
         <table class="form-table">
             <tr>
-                <th scope="row">Default Post Status</th>
+                <th scope="row"><label for="default_status">Default Post Status</label></th>
                 <td>
-                    <select name="default_status">
+                    <select name="default_status" id="default_status">
                         <option value="pending" <?php selected(get_option('blog_write_default_status'), 'pending'); ?>>Pending Review</option>
                         <option value="publish" <?php selected(get_option('blog_write_default_status'), 'publish'); ?>>Publish Immediately</option>
                         <option value="draft" <?php selected(get_option('blog_write_default_status'), 'draft'); ?>>Save as Draft</option>
@@ -25,15 +25,15 @@
                 </td>
             </tr>
             <tr class="recaptcha-settings">
-                <th scope="row">reCAPTCHA Site Key</th>
+                <th scope="row"><label for="recaptcha_site_key">reCAPTCHA Site Key</label></th>
                 <td>
-                    <input type="text" name="recaptcha_site_key" value="<?php echo esc_attr(get_option('blog_write_recaptcha_site_key')); ?>" class="regular-text">
+                    <input type="text" name="recaptcha_site_key" id="recaptcha_site_key" value="<?php echo esc_attr(get_option('blog_write_recaptcha_site_key')); ?>" class="regular-text">
                 </td>
             </tr>
             <tr class="recaptcha-settings">
-                <th scope="row">reCAPTCHA Secret Key</th>
+                <th scope="row"><label for="recaptcha_secret_key">reCAPTCHA Secret Key</label></th>
                 <td>
-                    <input type="text" name="recaptcha_secret_key" value="<?php echo esc_attr(get_option('blog_write_recaptcha_secret_key')); ?>" class="regular-text">
+                    <input type="text" name="recaptcha_secret_key" id="recaptcha_secret_key" value="<?php echo esc_attr(get_option('blog_write_recaptcha_secret_key')); ?>" class="regular-text">
                 </td>
             </tr>
         </table>

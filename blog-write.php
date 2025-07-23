@@ -15,28 +15,22 @@ defined('ABSPATH') or die('No direct access allowed!');
 define('BLOG_WRITE_PATH', plugin_dir_path(__FILE__));
 define('BLOG_WRITE_URL', plugin_dir_url(__FILE__));
 
-// Create necessary directories on activation
+// Activation hook
 function blog_write_activate() {
-    // Create upload directory if it doesn't exist
-    $upload_dir = wp_upload_dir();
-    $blog_write_dir = $upload_dir['basedir'] . '/blog-write';
-    if (!file_exists($blog_write_dir)) {
-        wp_mkdir_p($blog_write_dir);
-    }
-    
     // Create guest author role
-    blog_write_create_guest_role();
-}
-register_activation_hook(__FILE__, 'blog_write_activate');
-
-// Create guest author role
-function blog_write_create_guest_role() {
     if (!get_role('guest_author')) {
         add_role('guest_author', 'Guest Author', array(
             'read' => true,
         ));
     }
+    
+    // Set default options
+    add_option('blog_write_default_status', 'pending');
+    add_option('blog_write_enable_recaptcha', 0);
+    add_option('blog_write_recaptcha_site_key', '');
+    add_option('blog_write_recaptcha_secret_key', '');
 }
+register_activation_hook(__FILE__, 'blog_write_activate');
 
 // Include necessary files
 require_once BLOG_WRITE_PATH . 'includes/shortcodes.php';
@@ -55,7 +49,7 @@ function blog_write_load_assets() {
 }
 add_action('wp_enqueue_scripts', 'blog_write_load_assets');
 
-// Create settings page
+// Admin settings
 function blog_write_settings_page() {
     add_options_page(
         'Blog Write Settings',
@@ -68,8 +62,12 @@ function blog_write_settings_page() {
 add_action('admin_menu', 'blog_write_settings_page');
 
 function blog_write_settings_page_html() {
-    if (!current_user_can('manage_options')) return;
+    // Check user capabilities
+    if (!current_user_can('manage_options')) {
+        return;
+    }
     
+    // Save settings if form submitted
     if (isset($_POST['blog_write_settings_submit'])) {
         check_admin_referer('blog_write_settings');
         
@@ -81,11 +79,12 @@ function blog_write_settings_page_html() {
         echo '<div class="notice notice-success"><p>Settings saved!</p></div>';
     }
     
+    // Include settings template
     include BLOG_WRITE_PATH . 'templates/settings-page.php';
 }
 
-// Initialize the plugin
+// Initialize plugin
 function blog_write_init() {
-    // Nothing needed here for now, but good practice to have
+    // Nothing needed here for now
 }
 add_action('plugins_loaded', 'blog_write_init');

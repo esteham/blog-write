@@ -7,10 +7,6 @@ function blog_write_handle_submission() {
             $recaptcha_secret = get_option('blog_write_recaptcha_secret_key');
             $recaptcha_response = isset($_POST['g-recaptcha-response']) ? sanitize_text_field($_POST['g-recaptcha-response']) : '';
             
-            if (empty($recaptcha_response)) {
-                wp_die('reCAPTCHA verification failed. Please try again.');
-            }
-            
             $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
                 'body' => [
                     'secret' => $recaptcha_secret,
@@ -31,7 +27,7 @@ function blog_write_handle_submission() {
         if (is_user_logged_in()) {
             $author_id = get_current_user_id();
         } else {
-            if (!isset($_POST['guest_name']) || !isset($_POST['guest_email'])) {
+            if (empty($_POST['guest_name']) || empty($_POST['guest_email'])) {
                 wp_die('Name and email are required for guest submissions.');
             }
             
@@ -96,6 +92,7 @@ function blog_write_handle_submission() {
             wp_set_post_categories($post_id, [intval($_POST['blog_category'])]);
         }
         
+        // Redirect with success message
         wp_redirect(add_query_arg('blog_write_success', '1', wp_get_referer()));
         exit;
     }
