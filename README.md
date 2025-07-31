@@ -28,14 +28,14 @@ blog-write/
 │   └── css/
 │       └── style.css       # Optional styling
 └── README.md
-
+```
 ⚙️ Installation
 🔌 Manual Install
 
     Clone or download this repository:
-
+```bash
     git clone https://github.com/esteham/blog-write.git
-
+```
     Upload the blog-write folder to your WordPress /wp-content/plugins/ directory.
 
     Go to your WordPress Admin → Plugins → Activate “Blog Write”.
@@ -97,11 +97,12 @@ Have suggestions or want to improve the plugin?
 
 🧑‍💻 Author
 
+```bash
 Esteham H. Zihad Ansari
 📧 Email: estahamulhasan@gmail.com
 🌐 GitHub: @esteham
 📄 License
-
+```
 This project is licensed under the MIT License.
 
 Feel free to use, modify, and share!
